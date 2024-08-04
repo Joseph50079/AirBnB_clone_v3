@@ -78,6 +78,9 @@ class FileStorage:
             return None
 
     def count(self, cls=None):
+        """
+        Get count of all or cls
+        """
         new = self.all(cls)
         count = 0
         for i in new:
