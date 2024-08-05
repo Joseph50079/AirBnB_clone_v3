@@ -71,7 +71,7 @@ class FileStorage:
 
     def get(self, cls, id):
         """get the objects of cls and id"""
-        
+
         if cls:
             for v in self.__objects.values():
                 if cls == v.__class__ or cls == v.__class__.__name__:
