@@ -71,10 +71,13 @@ class FileStorage:
 
     def get(self, cls, id):
         """get the objects of cls and id"""
-        try:
-            obj = cls.__class__.__name__ + '.' + id
-            return self.__objects[obj]
-        except Exception:
+        
+        if cls:
+            for v in self.__objects.values():
+                if cls == v.__class__ or cls == v.__class__.__name__:
+                    if id == v.id:
+                        return v
+
             return None
 
     def count(self, cls=None):
