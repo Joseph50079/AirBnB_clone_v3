@@ -78,9 +78,11 @@ class DBStorage:
     def get(self, cls, id):
         """get cls objects from id else None"""
         try:
-
-            obj = self.__session.query(cls).filter_by(id=id).all()
-            return obj
+            if cls:
+                obj = self.__session.query(cls).get(id)
+                return obj
+            else:
+                return None
         except Exception:
             return None
 
@@ -88,7 +90,7 @@ class DBStorage:
         """
         Get count of all class or cls if specifyied all not None
         """
-        for clss in classes:
-            if cls is None or cls is classes[clss] or cls is clss:
-                objs = self.__session.query(classes[clss]).all()
-                return len(objs)
+        if cls:
+            return len(self.all(cls))
+        else:
+            return len(self.all())
