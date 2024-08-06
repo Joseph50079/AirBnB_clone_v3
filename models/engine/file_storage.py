@@ -79,6 +79,8 @@ class FileStorage:
                         return v
 
             return None
+        else:
+            return None
 
     def count(self, cls=None):
         """
