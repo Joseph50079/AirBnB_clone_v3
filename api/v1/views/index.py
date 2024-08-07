@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""module app""
+"""module app"""
 
 from models.review import Review
 from models.amenity import Amenity
