@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+
+"""For Blueprint setup"""
+
 from api.v1.views.index import *
 from flask import Blueprint
 
