@@ -27,9 +27,16 @@ def nop_404(err):
     j_404 = {
         "error": "Not found"
     }
-    if err:
-        j_404["error"] = str(err)
     return jsonify(j_404), 404
+
+
+@app.errorhandler(400)
+def resource_not_found(e):
+    j_400 = {
+        "error": "Bad Request",
+        "message": str(e.description) if e.description else "Not a JSON"
+    }
+    return jsonify(j_400), 400
 
 
 if __name__ == "__main__":

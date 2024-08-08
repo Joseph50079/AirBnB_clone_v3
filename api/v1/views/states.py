@@ -62,29 +62,39 @@ def post_state():
     """
     POST to State with body or content of request
     """
+
     data = request.get_json()
-    if data is None:
+    try:
+        if data is None:
+            abort(400, description="Not a JSON")
+        elif not data.get('name'):
+            abort(400, description="Missing name")
+        else:
+            new_obj = State()
+            new_obj.name = data.get('name')
+            storage.new(new_obj)
+            storage.save()
+            return jsonify(new_obj.to_dict()), 201
+    except Exception:
         abort(400, description="Not a JSON")
-    elif not data.get('name'):
-        abort(400, description="Missing name")
-    else:
-        new_obj = State()
-        new_obj.name = data.get('name')
-        storage.new(new_obj)
-        storage.save()
-        return jsonify(new_obj.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def put_state(state_id):
     obj = storage.all(State)
     data = request.get_json()
-    if data is None:
+
+    try:
+        if data is None:
+            abort(400, description="Not a JSON")
+
+        for key, value in obj.items():
+            if state_id == value.id:
+                for name, val in data.items():
+                    if name not in ('id', 'created_at', 'updated_at'):
+                        setattr(value, name, val)
+                        storage.save()
+                return jsonify(value.to_dict()), 200
+        abort(404)
+    except Exception:
         abort(400, description="Not a JSON")
-    for key, value in obj.items():
-        if state_id == value.id:
-            for name, val in data.items():
-                if name not in ('id', 'created_at', 'updated_at'):
-                    setattr(value, name, val)
-            return jsonify(value.to_dict()), 200
-    abort(404)
