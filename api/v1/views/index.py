@@ -34,7 +34,7 @@ def status():
     return (jsonify(j_dict))
 
 
-@app_views.route('/stats', methods=['GET'], strict_slashes=False:)
+@app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def stats():
     """Get stats of objects of Airbnb"""
     stats_json = {}
