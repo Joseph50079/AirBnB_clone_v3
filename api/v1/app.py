@@ -27,6 +27,8 @@ def nop_404(err):
     j_404 = {
         "error": "Not found"
     }
+    if err:
+        j_404["error"] = str(err)
     return jsonify(j_404), 404
 
 
