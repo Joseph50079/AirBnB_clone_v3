@@ -21,6 +21,9 @@ def close_storage(exception):
 
 @app.errorhandler(404)
 def nop_404(err):
+    """
+    For handling the 404 error page
+    """
     j_404 = {
         "error": "Not found"
     }
