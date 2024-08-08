@@ -20,6 +20,7 @@ def close_storage(exception):
 
 
 if __name__ == "__main__":
+    """Run and excute the flask api on all ip port 5000"""
     host = os.getenv('HBNB_API_HOST', '0.0.0.0')
     port = os.getenv('HBNB_API_PORT', '5000')
     app.run(host=host, port=port, debug=True, threaded=True)
