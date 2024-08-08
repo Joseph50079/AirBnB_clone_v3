@@ -64,37 +64,40 @@ def post_state():
     """
 
     data = request.get_json()
-    try:
-        if data is None:
-            abort(400, description="Not a JSON")
-        elif not data.get('name'):
-            abort(400, description="Missing name")
-        else:
-            new_obj = State()
-            new_obj.name = data.get('name')
-            storage.new(new_obj)
-            storage.save()
-            return jsonify(new_obj.to_dict()), 201
-    except Exception:
+    if data is None:
         abort(400, description="Not a JSON")
+    elif not data.get('name'):
+        abort(400, description="Missing name")
+    else:
+        new_obj = State()
+        new_obj.name = data.get('name')
+        storage.new(new_obj)
+        storage.save()
+        return jsonify(new_obj.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def put_state(state_id):
-    obj = storage.all(State)
+    """
+    PUT to update State with body or content of request
+    """
     data = request.get_json()
 
-    try:
-        if data is None:
-            abort(400, description="Not a JSON")
-
-        for key, value in obj.items():
-            if state_id == value.id:
-                for name, val in data.items():
-                    if name not in ('id', 'created_at', 'updated_at'):
-                        setattr(value, name, val)
-                        storage.save()
-                return jsonify(value.to_dict()), 200
-        abort(404)
-    except Exception:
+    # Check if JSON is provided
+    if data is None:
         abort(400, description="Not a JSON")
+
+    # Retrieve the state object by ID
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+
+    # Update state object with provided data
+    for name, val in data.items():
+        if name not in ('id', 'created_at', 'updated_at'):
+            setattr(state, name, val)
+
+    # Save changes to the storage
+    storage.save()
+
+    return jsonify(state.to_dict()), 200
